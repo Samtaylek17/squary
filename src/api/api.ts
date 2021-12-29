@@ -45,11 +45,10 @@ const tokenExpiryHandler = async (error: any) => {
     });
 };
 
-const refreshAuthLogic = (failedRequest: any): Promise<any> => {
-  return tokenExpiryHandler(failedRequest).then((token) => {
-    failedRequest.response.config.headers['Authorization'] = `Bearer ${token}`;
-    return Promise.resolve();
-  });
+const refreshAuthLogic = async (failedRequest: any): Promise<any> => {
+  const token = await tokenExpiryHandler(failedRequest);
+  failedRequest.response.config.headers['Authorization'] = `Bearer ${token}`;
+  return await Promise.resolve();
 };
 
 // Instantiate the interceptor (you can chain it as it returns the axios instance)

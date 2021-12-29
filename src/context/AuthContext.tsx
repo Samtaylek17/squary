@@ -35,8 +35,6 @@ const AuthContextProvider: FC = (props: any): React.ReactElement<typeof AuthCont
       setCurrentUser(theUser);
       setPending(false);
       if (!theUser && appHasUser) {
-        // newUser = null;
-        // console.log("no token");
         localStorage.removeItem('token');
         dispatch(logout(navigate));
       }

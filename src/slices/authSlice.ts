@@ -2,6 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 import { NavigateFunction, NavigateProps } from 'react-router-dom';
 import checkAuth from '../helpers/checkAuth';
 import app from '../firebase/base';
+import firebase from 'firebase/compat';
+import { loginUser, getUser } from '../api/endpoints';
 
 interface AuthInitialState {
   isAuthenticated: boolean;
@@ -70,6 +72,29 @@ interface IAction {
   payload?: object;
 }
 
+interface NewUser {
+  email: string;
+  password: string;
+  firstname?: string;
+}
+
+export const signup =
+  ({ email, password }: NewUser) =>
+  async (dispatch: (arg: IAction) => void) => {
+    dispatch(loginStart());
+    try {
+      const res = await app.auth().createUserWithEmailAndPassword(email, password);
+      if (res.user) {
+        const userData = {
+          email,
+          password,
+          id: res.user.uid,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        };
+      }
+    } catch {}
+  };
+
 export const logout = (navigate: any) => async (dispatch: (arg: IAction) => void) => {
   dispatch(loginStart());
   try {
@@ -81,12 +106,12 @@ export const logout = (navigate: any) => async (dispatch: (arg: IAction) => void
   }
 };
 
-export const fetchUser = () => async (dispatch) => {
+export const fetchUser = () => async (dispatch: (arg: IAction) => void) => {
   dispatch(loginStart());
   try {
     const user = await getUser();
     dispatch(getUserSuccess(user.data));
-  } catch (err) {
+  } catch (err: any) {
     dispatch(loginFailure(err.toString()));
   }
 };
