@@ -28,9 +28,24 @@ app.use(cors);
 
 const { loginUser } = require('./apis/users');
 
+const {
+  listProperty,
+  editProperty,
+  transferProperty,
+  getMyProperties,
+  getOneProperty,
+} = require('./apis/property');
+
 // Users
 app.post('/login', loginUser);
 // app.post('/logout', logout);
 app.get('/user', auth, getUserInfo);
+
+// Properties
+app.post('/properties', auth, listProperty);
+app.get('/properties', auth, getMyProperties);
+app.put('/properties/:propertyId', auth, editProperty);
+app.get('/properties/:propertyId', auth, getOneProperty);
+app.put('/properties/transfer/:propertyId', auth, transferProperty);
 
 exports.api = functions.https.onRequest(app);
