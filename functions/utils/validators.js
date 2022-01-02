@@ -1,10 +1,12 @@
+/* eslint-disable no-useless-escape */
+/* eslint-disable max-len */
 const isEmpty = (string) => {
   if (string.trim() === '') return true;
   else return false;
 };
 
 exports.validateLoginData = (data) => {
-  let errors = {};
+  const errors = {};
   if (isEmpty(data.email)) errors.email = 'Must not be empty';
   if (isEmpty(data.password)) errors.password = 'Must not be  empty';
   return {
@@ -14,7 +16,7 @@ exports.validateLoginData = (data) => {
 };
 
 exports.validateEmailField = (data) => {
-  let errors = {};
+  const errors = {};
   if (isEmpty(data.email)) {
     errors.email = 'Must not be empty';
   } else if (!isEmail(data.email)) {
@@ -34,7 +36,7 @@ const isEmail = (email) => {
 };
 
 exports.validateSignUpData = (data) => {
-  let errors = {};
+  const errors = {};
 
   if (isEmpty(data.email)) {
     errors.email = 'Must not be empty';

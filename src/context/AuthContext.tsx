@@ -30,16 +30,18 @@ const AuthContextProvider: FC = (props: any): React.ReactElement<typeof AuthCont
     }
   }, [dispatch, shouldFetchUser]);
 
-  useEffect(() => {
-    return app.auth().onAuthStateChanged(async (theUser) => {
-      setCurrentUser(theUser);
-      setPending(false);
-      if (!theUser && appHasUser) {
-        localStorage.removeItem('token');
-        dispatch(logout(navigate));
-      }
-    });
-  }, [appHasUser, dispatch]);
+  useEffect(
+    () =>
+      app.auth().onAuthStateChanged(async (theUser) => {
+        setCurrentUser(theUser);
+        setPending(false);
+        if (!theUser && appHasUser) {
+          localStorage.removeItem('token');
+          dispatch(logout(navigate));
+        }
+      }),
+    [appHasUser, dispatch]
+  );
 
   return (
     <AuthContext.Provider value={{ currentUser, pending }}>{props.children}</AuthContext.Provider>

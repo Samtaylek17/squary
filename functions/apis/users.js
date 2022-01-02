@@ -1,3 +1,7 @@
+/* eslint-disable space-before-function-paren */
+/* eslint-disable max-len */
+/* eslint-disable indent */
+/* eslint-disable no-unused-vars */
 const { admin, db } = require('../utils/admin');
 const firebase = require('../utils/firebase');
 
@@ -28,20 +32,50 @@ exports.loginUser = (request, response) => {
 };
 
 exports.getUserDetails = (request, response) => {
-  console.log(request.user);
-  let userData = {};
+  // console.log(request.user);
+  const userData = {};
   db.doc(`/users/${request.user.email}`)
     .get()
     .then((doc) => {
       if (doc.exists) {
         userData.userCredentials = doc.data();
-        const { password, userId, createdAt, ...userDataWithoutPasswordIdAndDate } = userData;
+        const { password, id, createdAt, ...userDataWithoutPasswordIdAndDate } = userData;
+        console.log(userDataWithoutPasswordIdAndDate);
         return response.json(userDataWithoutPasswordIdAndDate);
       }
     })
     .catch((error) => {
       console.error(error);
       return response.status(500).json({ error: error.code });
+    });
+};
+
+exports.getUserInfo = (request, response, next) => {
+  let idToken;
+  if (request.headers.authorization && request.headers.authorization.startsWith('Bearer ')) {
+    idToken = request.headers.authorization.split('Bearer ')[1];
+  } else {
+    return next();
+  }
+
+  firebase
+    .auth()
+    .verifyIdToken(idToken)
+    .then((decodedToken) => {
+      request.user = decodedToken;
+      return db.collection('users').where('userId', '==', request.user.uid).limit(1).get();
+    })
+    .then((data) => {
+      if (data && data.doc && data.docs.length) {
+        request.user.email = data.docs[0].data().email;
+
+        // request.user.roles = data.docs[0].data().roles;
+      }
+      return next();
+    })
+    .catch((err) => {
+      console.error('Error while verifying token', err);
+      return next();
     });
 };
 

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
-import app from '../firebase/base';
+import firebase from '../firebase/base';
 
 const api = axios.create({
   baseURL: '/',
@@ -27,28 +27,27 @@ const tokenExpiryHandler = async (error: any) => {
     return Promise.reject(error);
   }
 
-  if (!app.auth().currentUser) {
+  if (!firebase.auth().currentUser) {
     return Promise.reject(error);
   }
 
-  return app
+  return firebase
     .auth()
     .currentUser?.getIdToken(true)
     .then((token) => {
       if (token) {
         localStorage.setItem('token', token);
         return Promise.resolve(token);
-      } else {
-        localStorage.removeItem('token');
-        throw new Error('no token');
       }
+      localStorage.removeItem('token');
+      throw new Error('no token');
     });
 };
 
 const refreshAuthLogic = async (failedRequest: any): Promise<any> => {
   const token = await tokenExpiryHandler(failedRequest);
-  failedRequest.response.config.headers['Authorization'] = `Bearer ${token}`;
-  return await Promise.resolve();
+  failedRequest.response.config.headers.authorization = `Bearer ${token}`;
+  return Promise.resolve();
 };
 
 // Instantiate the interceptor (you can chain it as it returns the axios instance)

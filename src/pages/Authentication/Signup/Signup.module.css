@@ -1,0 +1,98 @@
+.viewHeight {
+  height: auto;
+  min-height: 100vh;
+}
+
+.navbarBrand {
+  position: absolute;
+  top: 20px;
+  left: 40px;
+}
+
+.header {
+  font-size: 25px;
+  line-height: 26px;
+}
+
+.formInput {
+  height: 60px;
+  border-radius: 4px;
+  background-color: var(--light-grey);
+}
+
+input[type='password'],
+input[type='text'] {
+  background-color: var(--light-grey);
+}
+
+.submitBtn {
+  width: 100%;
+  height: 60px;
+  border-radius: 4px;
+  background-color: var(--green);
+  border: none;
+  color: var(--white);
+}
+
+.submitBtn:hover {
+  background-color: var(--green);
+  border: none;
+  color: var(--white);
+}
+
+.socialBtn {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  border: 1px solid var(--green);
+  background-color: var(--white);
+  color: var(--grey);
+}
+
+.socialBtn:hover {
+  width: 100%;
+  height: 60px;
+  border-radius: 4px;
+  border: 1px solid var(--green);
+  background-color: var(--white);
+  color: var(--green);
+}
+
+.userTodos {
+  padding-left: 1rem;
+}
+
+.hrSect {
+  display: flex;
+  flex-basis: 100%;
+  align-items: center;
+  color: rgba(0, 0, 0, 0.35);
+  margin: 8px 0px;
+  padding: 0 50px;
+}
+.hrSect:before,
+.hrSect:after {
+  content: '';
+  flex-grow: 1;
+  background: rgba(0, 0, 0, 0.35);
+  height: 1px;
+  font-size: 0px;
+  line-height: 0px;
+}
+
+.hrSect:before {
+  margin: 0px 20px 0px 0px;
+}
+
+.hrSect:after {
+  margin: 0px 0px 0px 20px;
+}
+
+@media only screen and (max-width: 768px) {
+  .header {
+    font-size: 20px;
+  }
+}

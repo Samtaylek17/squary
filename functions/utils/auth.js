@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable max-len */
 const { admin, db } = require('./admin');
 
 exports.getUserInfo = (request, response, next) => {

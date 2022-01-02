@@ -1,11 +1,20 @@
 const functions = require('firebase-functions');
-const admin = require('firebase-admin');
 const express = require('express');
-const cors = require('cors')({ origin: true });
 const { auth, getUserInfo } = require('./utils/auth');
 const { db } = require('./utils/admin');
 
 const app = express();
+const cors = require('cors')({ origin: true });
+
+// eslint-disable-next-line max-len
+exports.addUIDfromSignUp = functions.auth.user().onCreate(async ({ email, uid }) => {
+  try {
+    // eslint-disable-next-line max-len
+    return db.collection('users').doc(email).set({ email, userId: uid }, { merge: true });
+  } catch (error) {
+    console.log('failed to add uid from new user', error);
+  }
+});
 
 app.use(cors);
 
@@ -17,11 +26,11 @@ app.use(cors);
 //   response.send("Hello from Firebase!");
 // });
 
-const { loginUser, getUserDetails } = require('./apis/users');
+const { loginUser } = require('./apis/users');
 
 // Users
 app.post('/login', loginUser);
 // app.post('/logout', logout);
-app.get('/user', auth, getUserDetails);
+app.get('/user', auth, getUserInfo);
 
 exports.api = functions.https.onRequest(app);

@@ -1,15 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { NavigateFunction, NavigateProps } from 'react-router-dom';
-import checkAuth from '../helpers/checkAuth';
-import app from '../firebase/base';
-import firebase from 'firebase/compat';
+// import checkAuth from '../helpers/checkAuth';
+import firebase from '../firebase/base';
 import { loginUser, getUser } from '../api/endpoints';
 
 interface AuthInitialState {
   isAuthenticated: boolean;
-  user: object | null;
+  user: Record<string, unknown> | null;
   isLoading: boolean;
-  error: object | null;
+  error: Record<string, unknown> | null;
 }
 
 const authInitialState = {
@@ -23,7 +22,10 @@ function startLoading(state: AuthInitialState) {
   state.isLoading = true;
 }
 
-function loadingFailed(state: AuthInitialState, action: any) {
+function loadingFailed(
+  state: AuthInitialState,
+  action: { payload: Record<string, unknown> | null }
+) {
   state.isLoading = false;
   state.error = action.payload;
 }
@@ -69,30 +71,63 @@ export default auth.reducer;
 
 interface IAction {
   type: string;
-  payload?: object;
+  payload?: Record<string, unknown> | null;
 }
 
 interface NewUser {
   email: string;
   password: string;
-  firstname?: string;
+  firstname: string;
+  lastname: string;
+  navigate?: any;
 }
 
 export const signup =
-  ({ email, password }: NewUser) =>
+  ({ firstname, lastname, email, password, navigate }: NewUser) =>
   async (dispatch: (arg: IAction) => void) => {
     dispatch(loginStart());
     try {
-      const res = await app.auth().createUserWithEmailAndPassword(email, password);
+      const res = await firebase.auth().createUserWithEmailAndPassword(email, password);
       if (res.user) {
         const userData = {
+          firstname,
+          lastname,
           email,
-          password,
           id: res.user.uid,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         };
+        await firebase.firestore().collection('/users').doc(res.user.uid).set(userData);
+        await res.user.updateProfile({ displayName: `${firstname} ${lastname}` });
+        dispatch(signupSuccess());
+        navigate.to('/');
       }
-    } catch {}
+    } catch (err: any) {
+      let message = {};
+      if (err.code === 'auth/email-already-in-use') {
+        message = { email: [err.message] };
+      }
+      dispatch(loginFailure(message));
+    }
+  };
+
+export const login =
+  ({ email, password, navigate }: Partial<NewUser>) =>
+  async (dispatch: (arg: IAction) => void) => {
+    dispatch(loginStart());
+    try {
+      const res = await firebase
+        .auth()
+        .signInWithEmailAndPassword(email as string, password as string);
+      const token = await res.user?.getIdToken();
+
+      // const user = checkAuth(token as string);
+      // console.log(user);
+      localStorage.setItem('token', token as string);
+      dispatch(loginSuccess());
+    } catch (err) {
+      const message = { email: ['wrong email or password'] };
+      dispatch(loginFailure(message));
+    }
   };
 
 export const logout = (navigate: any) => async (dispatch: (arg: IAction) => void) => {
@@ -109,8 +144,8 @@ export const logout = (navigate: any) => async (dispatch: (arg: IAction) => void
 export const fetchUser = () => async (dispatch: (arg: IAction) => void) => {
   dispatch(loginStart());
   try {
-    const user = await getUser();
-    dispatch(getUserSuccess(user.data));
+    const user = firebase.auth().currentUser?.providerData[0];
+    dispatch(getUserSuccess(user));
   } catch (err: any) {
     dispatch(loginFailure(err.toString()));
   }
