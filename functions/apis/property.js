@@ -8,12 +8,9 @@ exports.listProperty = (request, response) => {
   const newPropertyItem = {
     title: request.body.title,
     description: request.body.description,
+    price: request.body.price,
     owner: request.user.email,
     userId: request.user.user_id,
-    address: request.body.address,
-    bedrooms: request.body.bedrooms,
-    bathrooms: request.body.bathrooms,
-    price: request.body.price,
     createdAt: new Date().toISOString(),
   };
 
@@ -89,10 +86,10 @@ exports.getMyProperties = (request, response) => {
         let property = {
           propertyId: doc.id,
           title: doc.data().title,
-          address: doc.data().address,
-          bedrooms: doc.data().bedrooms,
-          bathrooms: doc.data().bathrooms,
+          description: doc.data().description,
           price: doc.data().price,
+          owner: doc.data().owner,
+          userId: doc.data().userId,
           createdAt: doc.data().createdAt,
           updatedAt: doc.data().updatedAt,
         };
@@ -117,10 +114,10 @@ exports.getOneProperty = (request, response) => {
         property = {
           propertyId: doc.id,
           title: doc.data().title,
-          address: doc.data().address,
-          bedrooms: doc.data().bedrooms,
-          bathrooms: doc.data().bathrooms,
           price: doc.data().price,
+          description: doc.data().description,
+          owner: doc.data().owner,
+          userId: doc.data().userId,
           createdAt: doc.data().createdAt,
           updatedAt: doc.data().updatedAt,
         };
