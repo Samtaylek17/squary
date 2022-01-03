@@ -1,8 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { NavigateFunction, NavigateProps } from 'react-router-dom';
 // import checkAuth from '../helpers/checkAuth';
 import firebase from '../firebase/base';
-import { loginUser, getUser } from '../api/endpoints';
+// import { loginUser, getUser } from '../api/endpoints';
 
 interface AuthInitialState {
   isAuthenticated: boolean;
@@ -11,7 +10,7 @@ interface AuthInitialState {
   error: Record<string, unknown> | null;
 }
 
-const authInitialState = {
+const authInitialState: AuthInitialState = {
   isAuthenticated: false,
   user: null,
   isLoading: false,

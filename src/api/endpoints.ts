@@ -14,7 +14,7 @@ export async function getUser() {
 
 // Property
 
-interface NewProperty {
+export interface NewProperty {
   title: string;
   description: string;
   price: string;
@@ -22,7 +22,7 @@ interface NewProperty {
   userId: string;
 }
 
-export async function newProperty({ title, description, price, owner, userId }: NewProperty) {
+export async function createProperty({ title, description, price, owner, userId }: NewProperty) {
   const url = `${process.env.REACT_APP_PROPERTY_API_URL}/properties`;
   return api.post(url, { title, description, price, owner, userId });
 }
@@ -32,4 +32,21 @@ export async function getMyProperties() {
   return api.get(url);
 }
 
-// export async function transferProperty()
+type TransferedProperty = {
+  recipientEmail: string;
+};
+
+export async function transferProperty(propertyId: string, transferedProperty: TransferedProperty) {
+  const url = `${process.env.REACT_APP_PROPERTY_API_URL}/properties/transfer/${propertyId}`;
+  return api.put(url, transferedProperty);
+}
+
+export async function getOneProperty(propertyId: string) {
+  const url = `${process.env.REACT_APP_PROPERTY_API_URL}/properties/${propertyId}`;
+  return api.get(url);
+}
+
+export async function updateProperty(propertyId: string, updatedProperty: Partial<NewProperty>) {
+  const url = `${process.env.REACT_APP_PROPERTY_API_URL}/properties/${propertyId}`;
+  return api.put(url, updatedProperty);
+}
