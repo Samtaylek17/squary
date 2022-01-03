@@ -8,15 +8,25 @@ import {
   NewProperty,
 } from '../api/endpoints';
 
+export type sampleProperty = {
+  propertyId?: string;
+  title?: string;
+  description?: string;
+  price?: string;
+  owner?: string;
+  userId?: string;
+  createdAt?: string;
+};
+
 interface PropertyInitialState {
-  currentProperty: Record<string, unknown> | null;
-  propertyList: Record<string, unknown>[];
+  currentProperty: sampleProperty | null;
+  propertyList: sampleProperty[];
   isLoading: boolean;
   error: Record<string, unknown> | null;
 }
 
 const propertyInitialState: PropertyInitialState = {
-  currentProperty: {},
+  currentProperty: null,
   propertyList: [],
   isLoading: false,
   error: null,
@@ -57,6 +67,8 @@ const properties = createSlice({
     addPropertySuccess(state, action) {
       state.propertyList.unshift(action.payload.data.property);
       state.currentProperty = action.payload.data.property;
+      state.isLoading = false;
+      state.error = null;
     },
     addPropertyFailure: loadingFailed,
     editPropertyStart: startLoading,
@@ -154,6 +166,15 @@ export const fetchProperty = (propertyId: string) => async (dispatch: (arg: IAct
     dispatch(getPropertyStart());
     const property = await getOneProperty(propertyId);
     dispatch(getPropertySuccess(property.data));
+  } catch (err: any) {
+    dispatch(getPropertyFailure(err.toString()));
+  }
+};
+
+export const emptyCurrentSurvey = () => async (dispatch: (arg: IAction) => void) => {
+  try {
+    dispatch(getPropertyStart());
+    dispatch(getPropertySuccess(null));
   } catch (err: any) {
     dispatch(getPropertyFailure(err.toString()));
   }

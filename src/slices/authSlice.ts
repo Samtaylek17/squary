@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-// import checkAuth from '../helpers/checkAuth';
+import checkAuth from '../helpers/checkAuth';
 import firebase from '../firebase/base';
 // import { loginUser, getUser } from '../api/endpoints';
 
@@ -48,6 +48,8 @@ const auth = createSlice({
     logoutSuccess: (state: AuthInitialState) => {
       state.user = null;
       state.isAuthenticated = false;
+      state.error = null;
+      state.isLoading = false;
     },
     getUserSuccess(state: AuthInitialState, { payload }) {
       state.user = payload;
@@ -78,11 +80,10 @@ interface NewUser {
   password: string;
   firstname: string;
   lastname: string;
-  navigate?: any;
 }
 
 export const signup =
-  ({ firstname, lastname, email, password, navigate }: NewUser) =>
+  ({ firstname, lastname, email, password }: NewUser, navigate: any) =>
   async (dispatch: (arg: IAction) => void) => {
     dispatch(loginStart());
     try {
@@ -110,7 +111,7 @@ export const signup =
   };
 
 export const login =
-  ({ email, password, navigate }: Partial<NewUser>) =>
+  ({ email, password }: Partial<NewUser>) =>
   async (dispatch: (arg: IAction) => void) => {
     dispatch(loginStart());
     try {
@@ -119,8 +120,8 @@ export const login =
         .signInWithEmailAndPassword(email as string, password as string);
       const token = await res.user?.getIdToken();
 
-      // const user = checkAuth(token as string);
-      // console.log(user);
+      const user = checkAuth(token as string);
+
       localStorage.setItem('token', token as string);
       dispatch(loginSuccess());
     } catch (err) {
@@ -129,11 +130,10 @@ export const login =
     }
   };
 
-export const logout = (navigate: any) => async (dispatch: (arg: IAction) => void) => {
+export const logout = () => async (dispatch: (arg: IAction) => void) => {
   dispatch(loginStart());
   try {
-    localStorage.removeItem('user');
-    navigate.to('/login');
+    localStorage.removeItem('token');
     dispatch(logoutSuccess());
   } catch (err: any) {
     dispatch(loginFailure(err.toString()));

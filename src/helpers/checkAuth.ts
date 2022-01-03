@@ -1,22 +1,39 @@
 // import jwt from 'jsonwebtoken';
 
-// /**
-//  * @desc verifies token
-//  * @param {string} token jwt token
-//  * @returns {object} object
-//  */
-// const checkAuth = (token: string): Record<string, unknown> => {
-//   if (!token) {
-//     throw Error('no token found');
-//   }
-//   const decoded = jwt.decode(token);
-//   if (decoded && (decoded as { exp: number }).exp > Date.now() / 1000) {
-//     return { userId: (decoded as { user_id: string }).user_id };
-//   }
+/**
+ * @desc decodes jwt token and returns payload
+ * @param token
+ * @returns json payload
+ */
+const jwtDecoder = (token: string) => {
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace(/-/g, '+').replace(/-/g, '/');
+  const jsonPayload = decodeURIComponent(
+    atob(base64)
+      .split('')
+      .map((c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
+      .join('')
+  );
 
-//   throw Error('expired token');
-// };
+  return JSON.parse(jsonPayload);
+};
 
-// export default checkAuth;
+/**
+ * @desc verifies token
+ * @param {string} token jwt token
+ * @returns {object} object
+ */
+const checkAuth = (token: string) => {
+  if (!token) {
+    throw Error('no token found');
+  }
+  const decoded = jwtDecoder(token);
+  if (decoded && (decoded as { exp: number }).exp > Date.now() / 1000) {
+    // eslint-disable-next-line camelcase
+    return { userId: decoded.user_id };
+  }
 
-export {};
+  throw Error('expired token');
+};
+
+export default checkAuth;

@@ -25,7 +25,7 @@ const Signup: FC = () => {
   } = useSelector((state: RootState) => state.user);
 
   const handleSubmit = async () => {
-    dispatch(signup({ firstname, lastname, email, password, navigate }));
+    dispatch(signup({ firstname, lastname, email, password }, navigate));
   };
 
   useEffect(() => {

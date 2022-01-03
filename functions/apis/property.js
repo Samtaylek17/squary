@@ -63,6 +63,10 @@ exports.transferProperty = async (request, response) => {
   const recipient = db.collection('users').where('email', '==', request.body.recipientEmail).get();
   console.log(recipient);
 
+  if (!recipient || recipient === undefined) {
+    return response.status(404).json({ message: 'Email does not exist in our database' });
+  }
+
   document
     .update({ owner: recipient.email, userId: recipient.id, updatedAt: new Date().toISOString() })
     .then(() => {

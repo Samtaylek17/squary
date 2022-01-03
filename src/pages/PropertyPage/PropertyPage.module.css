@@ -1,0 +1,23 @@
+.updateBtn {
+  border: none;
+  background-color: #ce375c;
+  height: 45px;
+  padding: 0 24px;
+  margin-right: 20px;
+  border-radius: 10px;
+  color: #fff;
+}
+
+.transferBtn {
+  border: 1px solid #ce375c;
+  background-color: transparent;
+  height: 45px;
+  padding: 0 24px;
+  margin-right: 20px;
+  border-radius: 10px;
+  color: #ce375c;
+}
+
+.goback {
+  margin-bottom: 20px;
+}

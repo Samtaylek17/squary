@@ -18,13 +18,11 @@ export interface NewProperty {
   title: string;
   description: string;
   price: string;
-  owner: string;
-  userId: string;
 }
 
-export async function createProperty({ title, description, price, owner, userId }: NewProperty) {
+export async function createProperty({ title, description, price }: NewProperty) {
   const url = `${process.env.REACT_APP_PROPERTY_API_URL}/properties`;
-  return api.post(url, { title, description, price, owner, userId });
+  return api.post(url, { title, description, price });
 }
 
 export async function getMyProperties() {

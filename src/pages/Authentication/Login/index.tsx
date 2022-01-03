@@ -23,7 +23,7 @@ const Login: FC = () => {
   } = useSelector((state: RootState) => state.user);
 
   const handleSubmit = async () => {
-    dispatch(login({ email, password, navigate }));
+    dispatch(login({ email, password }));
     // message.success('Login successful!', 5);
   };
 

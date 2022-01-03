@@ -1,3 +1,9 @@
+.navbarBrand {
+  color: #ce375c;
+  font-weight: bold;
+  font-size: 38px;
+}
+
 .profileBtn {
   border-radius: 27px;
   height: 40px;
@@ -22,12 +28,24 @@
 }
 
 .loginBtn {
-  color: #fff;
-  border-radius: 30px;
-  background-color: var(--black);
-  padding: 10px 40px;
+  color: #fff !important;
+  border-radius: 10px;
+  text-align: center;
+  background-color: #222222;
+  width: 100px;
   text-decoration: none;
   vertical-align: middle;
+}
+
+.signupBtn {
+  color: #fff !important;
+  border-radius: 10px;
+  text-align: center;
+  background-color: #ce375c;
+  width: 100px;
+  text-decoration: none;
+  vertical-align: middle;
+  border: none;
 }
 
 .loginBtn:hover {
@@ -39,7 +57,7 @@
 }
 
 .navbarLink {
-  color: var(--black) !important;
+  color: var(--black);
   display: block;
   text-decoration: none;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
@@ -51,6 +69,7 @@
 .navbarExpand .navbarNav .navbarLink {
   padding-left: 1rem;
   padding-right: 1rem;
+  margin: 0 0.5rem;
 }
 
 .navbarToggler:focus {

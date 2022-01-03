@@ -37,13 +37,14 @@ const AuthContextProvider: FC = (props: any): React.ReactElement<typeof AuthCont
         setPending(false);
         if (!theUser && appHasUser) {
           localStorage.removeItem('token');
-          dispatch(logout(navigate));
+          dispatch(logout());
         }
       }),
     [appHasUser, dispatch]
   );
 
   return (
+    // eslint-disable-next-line react/destructuring-assignment
     <AuthContext.Provider value={{ currentUser, pending }}>{props.children}</AuthContext.Provider>
   );
 };

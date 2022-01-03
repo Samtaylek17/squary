@@ -11,6 +11,7 @@ import AuthContextProvider from './context/AuthContext';
 const Home = lazy(() => import('./pages/Home'));
 const Signup = lazy(() => import('./pages/Authentication/Signup'));
 const Login = lazy(() => import('./pages/Authentication/Login'));
+const PropertyPage = lazy(() => import('./pages/PropertyPage'));
 
 const AppRoutes = () => {
   const styles = {
@@ -34,7 +35,8 @@ const AppRoutes = () => {
 
   // type RouteProps = { element: LazyExoticComponent<FC<{}>>; exact: boolean; path: string; }
 
-  const PrivateRoute = () => (user && isAuthenticated ? <Outlet /> : <Navigate to="/login" />);
+  const PrivateRoute: FC = () =>
+    !isEmpty(user) && isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
 
   return (
     <BrowserRouter>
@@ -43,6 +45,7 @@ const AppRoutes = () => {
           <Routes>
             <Route element={<PrivateRoute />}>
               <Route path="/" element={<Home />} />
+              <Route path="/property/:id" element={<PropertyPage />} />
             </Route>
             <Route
               path="/signup"
