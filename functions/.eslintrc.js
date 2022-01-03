@@ -1,3 +1,4 @@
+/* eslint-disable quote-props */
 module.exports = {
   root: true,
   env: {
@@ -10,6 +11,8 @@ module.exports = {
   },
   rules: {
     'object-curly-spacing': ['error', 'always'],
-    indent: ['error', 'always'],
+    indent: ['error', 2],
+    'quote-props': ['error', 'as-needed'],
+    'max-len': 'off',
   },
 };

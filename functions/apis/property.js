@@ -1,4 +1,4 @@
-const { db, admin } = require('../utils/admin');
+const { db } = require('../utils/admin');
 
 exports.listProperty = (request, response) => {
   if (request.body.title.trim() === '') {
@@ -35,7 +35,7 @@ exports.editProperty = (request, response) => {
   if (request.body.propertyId || request.body.createdAt) {
     response.status(403).json({ message: 'Not allowed to edit' });
   }
-  let document = db.collection('properties').doc(`${request.params.propertyId}`);
+  const document = db.collection('properties').doc(`${request.params.propertyId}`);
   document
     .update({ ...request.body, updatedAt: new Date().toISOString() })
     .then(() => {
@@ -54,7 +54,7 @@ exports.transferProperty = async (request, response) => {
     response.status(403).json({ message: 'Not allowed to edit' });
   }
 
-  let document = await db.collection('properties').doc(`${request.params.propertyId}`).get();
+  const document = await db.collection('properties').doc(`${request.params.propertyId}`).get();
 
   if (document.email !== request.user.email) {
     response.status(403).json({ message: 'You are not allowed to perform this action' });
@@ -81,9 +81,9 @@ exports.getMyProperties = (request, response) => {
     .orderBy('createdAt', 'desc')
     .get()
     .then((data) => {
-      let properties = [];
+      const properties = [];
       data.forEach((doc) => {
-        let property = {
+        const property = {
           propertyId: doc.id,
           title: doc.data().title,
           description: doc.data().description,
@@ -105,13 +105,13 @@ exports.getMyProperties = (request, response) => {
 
 exports.getOneProperty = (request, response) => {
   const propertyId = request.params.propertyId;
-  let property = {};
+  // let property = {};
   db.collection('properties')
     .doc(propertyId)
     .get()
     .then((doc) => {
       if (doc.exists) {
-        property = {
+        const property = {
           propertyId: doc.id,
           title: doc.data().title,
           price: doc.data().price,
@@ -121,6 +121,14 @@ exports.getOneProperty = (request, response) => {
           createdAt: doc.data().createdAt,
           updatedAt: doc.data().updatedAt,
         };
+        return response.json(property);
+      } else {
+        console.log('No such property');
+        return response.status(404);
       }
+    })
+    .catch((err) => {
+      console.error(err);
+      return response.status(500).json({ error: err.code });
     });
 };
