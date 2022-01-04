@@ -1,13 +1,18 @@
 import React, { FC, useState, useEffect, useMemo } from 'react';
 import classNames from 'classnames/bind';
-import { Modal, Form, Input, Button, Spin, message } from 'antd';
+import { Modal, Form, Input, Button, Spin } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../../components/Header';
 import styles from './PropertyPage.module.css';
 import House1 from '../Home/img/home1.jpeg';
 import { RootState } from '../../app/rootReducer';
-import { editProperty, fetchMyProperties, fetchProperty } from '../../slices/propertySlice';
+import {
+  editProperty,
+  fetchMyProperties,
+  fetchProperty,
+  transferAsset,
+} from '../../slices/propertySlice';
 
 const PropertyPage: FC = () => {
   const cx = classNames.bind(styles);
@@ -38,6 +43,8 @@ const PropertyPage: FC = () => {
   );
   const [regPrice, setPrice] = useState<string | undefined>(`${updatedProperty?.price}`);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [transferModal, setTransferModal] = useState<boolean>(false);
+  const [recipientEmail, setRecipientEmail] = useState<string>('');
 
   useEffect(() => {
     dispatch(fetchProperty(id as string));
@@ -72,8 +79,23 @@ const PropertyPage: FC = () => {
     }, 500);
   };
 
+  const handleTransfer = () => {
+    dispatch(transferAsset(id as string, recipientEmail, navigate));
+    setTimeout(() => {
+      setTransferModal(false);
+    }, 500);
+  };
+
   const showModal = () => {
     setIsModalVisible(true);
+  };
+
+  const showTransferModal = () => {
+    setTransferModal(true);
+  };
+
+  const handleCancelModal = () => {
+    setTransferModal(false);
   };
 
   const handleCancel = () => {
@@ -101,9 +123,10 @@ const PropertyPage: FC = () => {
               <button type="button" className={styles.updateBtn} onClick={showModal}>
                 Update Property
               </button>
-              <button type="button" className={styles.transferBtn}>
+              <button type="button" className={styles.transferBtn} onClick={showTransferModal}>
                 Transfer Asset
               </button>
+
               <Modal
                 title="Edit Property"
                 visible={isModalVisible}
@@ -152,6 +175,44 @@ const PropertyPage: FC = () => {
                     <Form.Item>
                       <Button className={`${cx({ submitBtn: true })}`} htmlType="submit">
                         Add Property
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                </Spin>
+              </Modal>
+
+              <Modal
+                title="Edit Property"
+                visible={transferModal}
+                onCancel={handleCancelModal}
+                footer={[]}
+              >
+                <Spin delay={500} spinning={Boolean(propertyLoading)}>
+                  <Form
+                    form={form}
+                    name="add-property"
+                    className="add-property-form"
+                    onFinish={handleTransfer}
+                    initialValues={{ remember: true }}
+                    layout="vertical"
+                  >
+                    <Form.Item
+                      name="email"
+                      rules={[
+                        { type: 'email', message: 'Please input a valid email!' },
+                        { required: true, message: 'Please input your email!' },
+                      ]}
+                    >
+                      <Input
+                        placeholder="Email"
+                        type="email"
+                        className={`${cx({ formInput: true })}`}
+                        onChange={(e) => setRecipientEmail(e.target.value)}
+                      />
+                    </Form.Item>
+                    <Form.Item>
+                      <Button className={`${cx({ submitBtn: true })}`} htmlType="submit">
+                        Transfer
                       </Button>
                     </Form.Item>
                   </Form>

@@ -54,29 +54,37 @@ exports.transferProperty = async (request, response) => {
     response.status(403).json({ message: 'Not allowed to edit' });
   }
 
-  const document = await db.collection('properties').doc(`${request.params.propertyId}`).get();
+  const document = db.collection('properties').doc(`${request.params.propertyId}`);
 
-  if (document.email !== request.user.email) {
-    response.status(403).json({ message: 'You are not allowed to perform this action' });
-  }
-
-  const recipient = db.collection('users').where('email', '==', request.body.recipientEmail).get();
-  console.log(recipient);
-
-  if (!recipient || recipient === undefined) {
-    return response.status(404).json({ message: 'Email does not exist in our database' });
-  }
-
-  document
-    .update({ owner: recipient.email, userId: recipient.id, updatedAt: new Date().toISOString() })
-    .then(() => {
-      response.json({ message: 'Property transfered successfully' }).catch((err) => {
-        console.log(err);
-        return response.status(500).json({
-          error: err.code,
+  document.get().then((doc) => {
+    if (doc.exists && doc.data().owner === request.user.email) {
+      db.collection('users')
+        .where('email', '==', request.body.recipientEmail)
+        .get()
+        .then((querySnapshot) => {
+          if (querySnapshot) {
+            console.log(querySnapshot.docs[0].data());
+            document
+              .update({
+                owner: request.body.recipientEmail,
+                userId: querySnapshot.docs[0].data().id,
+                updatedAt: new Date().toISOString(),
+              })
+              .then(() => {
+                response.json({ message: 'Updated successfully' });
+              })
+              .catch((err) => {
+                console.error(err);
+                return response.status(500).json({
+                  error: err.code,
+                });
+              });
+          }
         });
-      });
-    });
+    } else {
+      return response.status(403).json({ message: 'You are not allowed to perform this action' });
+    }
+  });
 };
 
 exports.getMyProperties = (request, response) => {

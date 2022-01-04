@@ -71,6 +71,13 @@ const properties = createSlice({
       state.error = null;
     },
     addPropertyFailure: loadingFailed,
+    transferPropertyStart: startLoading,
+    transferPropertySuccess(state, action) {
+      state.currentProperty = null;
+      state.isLoading = false;
+      state.error = null;
+    },
+    transferPropertyFailure: loadingFailed,
     editPropertyStart: startLoading,
     editPropertySuccess(state, action) {
       state.currentProperty = { ...state.currentProperty, ...action.payload.updatedProperty };
@@ -102,6 +109,9 @@ export const {
   editPropertyStart,
   editPropertySuccess,
   editPropertyFailure,
+  transferPropertyStart,
+  transferPropertySuccess,
+  transferPropertyFailure,
 } = properties.actions;
 
 export default properties.reducer;
@@ -171,11 +181,14 @@ export const fetchProperty = (propertyId: string) => async (dispatch: (arg: IAct
   }
 };
 
-export const emptyCurrentSurvey = () => async (dispatch: (arg: IAction) => void) => {
-  try {
-    dispatch(getPropertyStart());
-    dispatch(getPropertySuccess(null));
-  } catch (err: any) {
-    dispatch(getPropertyFailure(err.toString()));
-  }
-};
+export const transferAsset =
+  (propertyId: string, recipientEmail: string, navigate: any) =>
+  async (dispatch: (arg: IAction) => void) => {
+    try {
+      dispatch(transferPropertyStart());
+      await transferProperty(propertyId, recipientEmail);
+      navigate('/');
+    } catch (err: any) {
+      dispatch(transferPropertyFailure(err.toString()));
+    }
+  };

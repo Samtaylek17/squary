@@ -7,7 +7,7 @@ import classNames from 'classnames/bind';
 import styles from './Home.module.css';
 import Header from '../../components/Header';
 import { RootState } from '../../app/rootReducer';
-import { addProperty, fetchMyProperties, emptyCurrentSurvey } from '../../slices/propertySlice';
+import { addProperty, fetchMyProperties } from '../../slices/propertySlice';
 import Home1 from './img/home1.jpeg';
 
 const Home: FC = () => {

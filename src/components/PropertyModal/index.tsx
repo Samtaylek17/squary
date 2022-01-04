@@ -1,18 +1,23 @@
 /* eslint-disable react/require-default-props */
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useMemo, useEffect, useState } from 'react';
 import { Modal, Form, Input, Spin, Button } from 'antd';
 import classNames from 'classnames/bind';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import styles from './Property.module.css';
 import { RootState } from '../../app/rootReducer';
-import { fetchProperty, sampleProperty } from '../../slices/propertySlice';
+import {
+  editProperty,
+  fetchMyProperties,
+  fetchProperty,
+  sampleProperty,
+} from '../../slices/propertySlice';
 
 interface PropertyModalProps {
   isModalVisible: boolean;
   setIsModalVisible: (value: boolean) => void;
   handleCancel: () => void;
-  handleSubmit: () => void;
+  // handleSubmit: () => void;
   // title?: string;
   setTitle: (value: string) => void;
   // description?: string;
@@ -25,7 +30,7 @@ const PropertyModal = ({
   isModalVisible,
   setIsModalVisible,
   handleCancel,
-  handleSubmit,
+  // handleSubmit,
   setTitle,
   setDescription,
   setPrice,
@@ -41,22 +46,21 @@ const PropertyModal = ({
     currentProperty,
   } = useSelector((state: RootState) => state.properties);
 
-  // const [title] = useState<string>(`${currentProperty?.title}`);
-  // const [description] = useState<string>(`${currentProperty?.description}`);
-  // const [price] = useState<string>(`${currentProperty?.price}`);
-
   const { id } = useParams<{ id: string }>();
-
   const getCurrentProperty = () => {
     const y = propertyList.find(({ propertyId }) => propertyId === id);
-    return y as sampleProperty;
+    return y;
   };
 
-  const { title, description, price }: Partial<sampleProperty> = getCurrentProperty();
+  const updatedProperty = useMemo(() => getCurrentProperty(), [propertyList]);
+
+  const [title] = useState<string | undefined>(`${updatedProperty?.title}`);
+  const [description] = useState<string | undefined>(`${updatedProperty?.description}`);
+  const [price] = useState<string | undefined>(`${updatedProperty?.price}`);
 
   useEffect(() => {
     dispatch(fetchProperty(id as string));
-    getCurrentProperty();
+    dispatch(fetchMyProperties());
   }, [dispatch, id]);
 
   useEffect(() => {
@@ -71,13 +75,21 @@ const PropertyModal = ({
     }
 
     // eslint-disable-next-line @typescript-eslint/no-shadow
+    getCurrentProperty();
 
     form.setFieldsValue({
       title,
       description,
       price,
     });
-  }, [form, propertyError]);
+  }, [form, getCurrentProperty, propertyError]);
+
+  const handleSubmit = () => {
+    dispatch(editProperty(id as string, { title, description, price }));
+    setTimeout(() => {
+      setIsModalVisible(false);
+    }, 500);
+  };
 
   return (
     <Modal title="Edit Property" visible={isModalVisible} onCancel={handleCancel} footer={[]}>

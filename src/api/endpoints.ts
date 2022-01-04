@@ -30,13 +30,9 @@ export async function getMyProperties() {
   return api.get(url);
 }
 
-type TransferedProperty = {
-  recipientEmail: string;
-};
-
-export async function transferProperty(propertyId: string, transferedProperty: TransferedProperty) {
+export async function transferProperty(propertyId: string, recipientEmail: string) {
   const url = `${process.env.REACT_APP_PROPERTY_API_URL}/properties/transfer/${propertyId}`;
-  return api.put(url, transferedProperty);
+  return api.put(url, { recipientEmail });
 }
 
 export async function getOneProperty(propertyId: string) {
