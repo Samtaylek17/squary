@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable global-require */
 import { configureStore } from '@reduxjs/toolkit';
 import {
   persistStore,
