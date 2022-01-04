@@ -27,23 +27,17 @@ const Header: FC = () => {
           <button type="button" className={`${cx({ navbarToggler: true })} navbar-toggler`}>
             <span className="navbar-toggler-icon" />
           </button>
-          <div className="collapse navbar-collapse">
-            <ul className={`${cx({ navbarNav: true })} navbar-nav ms-auto`}>
+          <div className="navbar-collapse">
+            <ul className={`${cx({ navbarNav: true })} navbar-nav flex-row ms-auto`}>
               <li className="nav-item">
-                <a className={`${cx({ navbarLink: true })} nav-link active`} href="/registrations">
-                  Home
-                </a>
+                <span className="nav-link text-dark">Welcome {user?.displayName}</span>
               </li>
-              <li className="nav-item">
-                <a className={`${cx({ navbarLink: true })} nav-link`} href="/documents">
-                  About
-                </a>
-              </li>
+
               {isAuthenticated && user ? (
                 <>
                   <li className="nav-item">
                     <button
-                      className={`${cx({ navbarLink: true, signupBtn: true })} nav-link`}
+                      className={`${cx({ navbarLink: true, signupBtn: true })} nav-link logout`}
                       type="button"
                       onClick={handleLogout}
                     >

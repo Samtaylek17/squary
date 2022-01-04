@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Modal, Form, Input, Button, Spin, message } from 'antd';
 import { PlusOutlined, LinkOutlined } from '@ant-design/icons';
 import classNames from 'classnames/bind';
+import { Steps } from 'intro.js-react';
 import styles from './Home.module.css';
 import Header from '../../components/Header';
 import { RootState } from '../../app/rootReducer';
@@ -20,6 +21,38 @@ const Home: FC = () => {
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [price, setPrice] = useState('');
+  const [steps, setSteps] = useState([
+    {
+      element: '.addProperty',
+      title: 'List Property',
+      intro: 'Add a new property here',
+      position: 'right',
+      tooltipClass: 'mytooltip',
+      highlightClass: 'myhighlight',
+    },
+    {
+      element: '.view-property',
+      title: 'View Property',
+      intro: 'Click here to view details about each property',
+      position: 'right',
+      tooltipClass: 'mytooltip',
+      highlightClass: 'myhighlight',
+    },
+    {
+      element: '.logout',
+      title: 'Logout',
+      intro: 'Logout of the application',
+      position: 'left',
+      tooltipClass: 'mytooltip',
+      highlightClass: 'myhighlight',
+    },
+  ]);
+  const [stepsEnabled, setStepsEnabled] = useState(true);
+  const [initialStep, setInitialStep] = useState(0);
+
+  const onExit = () => {
+    setStepsEnabled(false);
+  };
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -73,8 +106,19 @@ const Home: FC = () => {
       <section>
         <div className="container">
           <div className="row mt-5">
-            <div className="col-md-6 col-4">
-              <button type="button" className={styles.addProperty} onClick={showModal}>
+            <div className="col-md-6">
+              <Steps
+                enabled={stepsEnabled}
+                steps={steps}
+                initialStep={initialStep}
+                onExit={onExit}
+                options={{ doneLabel: 'Done' }}
+              />
+              <button
+                type="button"
+                className={`${cx({ addProperty: true })} addProperty`}
+                onClick={showModal}
+              >
                 <PlusOutlined className="align-middle" />
                 Add Property
               </button>
@@ -134,12 +178,6 @@ const Home: FC = () => {
                 </Spin>
               </Modal>
             </div>
-            <div className="col-md-6 text-end col-6">
-              <button type="button" className={styles.addProperty}>
-                <LinkOutlined className="align-middle" />
-                Transfer Property
-              </button>
-            </div>
           </div>
         </div>
       </section>
@@ -148,7 +186,7 @@ const Home: FC = () => {
           <h3 className="text-center mt-5">My Properties</h3>
           <div className="row mt-3">
             {propertyList.map((property) => (
-              <div className="col-md-3 mt-3">
+              <div className="col-md-3 mt-3 d-flex align-self-stretched">
                 <div className="card">
                   <div className="card-header">
                     <img src={Home1} className="img-fluid" alt="house" />
@@ -159,7 +197,7 @@ const Home: FC = () => {
 
                     <button
                       type="button"
-                      className={styles.addProperty}
+                      className={`${cx({ addProperty: true })} view-property`}
                       onClick={() => viewSingleProperty(property.propertyId)}
                     >
                       <LinkOutlined className="align-middle" />

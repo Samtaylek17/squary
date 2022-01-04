@@ -54,15 +54,15 @@ const Login: FC = () => {
           <div className="row justify-content-center">
             <div className="col-md-7">
               <div className="container p-sm-5 py-5 px-0">
-                <p className="text-grey text-end d-sm-block d-none">
-                  Don&#39;t have an account?{' '}
-                  <a href="/signup" className="text-green text-decoration-none">
-                    Sign up
-                  </a>
-                </p>
-
                 <div className="row px-lg-5 mt-5">
                   <div className="col-md-10 mx-auto">
+                    <p className="text-grey text-end d-sm-block d-none">
+                      Don&#39;t have an account?{' '}
+                      <a href="/signup" className="text-green text-decoration-none">
+                        Sign up
+                      </a>
+                    </p>
+                    <h2 className={`${cx({ header: true })} text-sm-start text-center`}>Login</h2>
                     <Spin delay={500} spinning={Boolean(authLoading)}>
                       <div className="row mt-5">
                         <Form

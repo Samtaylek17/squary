@@ -55,15 +55,14 @@ const Signup: FC = () => {
           <div className="row justify-content-center">
             <div className="col-sm-7 col-12">
               <div className="container p-sm-5 py-5 px-0">
-                <p className="text-grey text-end d-sm-block d-none">
-                  Already have an account?{' '}
-                  <a href="/login" className="text-green text-decoration-none">
-                    Sign In
-                  </a>
-                </p>
-
                 <div className="row px-lg-5 mt-5">
                   <div className="col-md-10 mx-auto">
+                    <p className="text-grey text-end d-sm-block d-none">
+                      Already have an account?{' '}
+                      <a href="/login" className="text-green text-decoration-none">
+                        Sign In
+                      </a>
+                    </p>
                     <h2 className={`${cx({ header: true })} text-sm-start text-center`}>
                       Create an account
                     </h2>

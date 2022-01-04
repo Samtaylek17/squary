@@ -29,15 +29,15 @@ input[type='text'] {
   width: 100%;
   height: 60px;
   border-radius: 4px;
-  background-color: var(--green);
+  background-color: #ce375c;
   border: none;
-  color: var(--white);
+  color: #fff;
 }
 
 .submitBtn:hover {
-  background-color: var(--green);
+  background-color: #ce375c;
   border: none;
-  color: var(--white);
+  color: #fff;
 }
 
 .socialBtn {

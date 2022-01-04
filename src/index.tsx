@@ -6,6 +6,7 @@ import store, { persistor } from './app/store';
 // import AuthContextProvider from './context/AuthContext';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'intro.js/introjs.css';
 import AppRoutes from './routes';
 import reportWebVitals from './reportWebVitals';
 
