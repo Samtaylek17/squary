@@ -72,7 +72,7 @@ const properties = createSlice({
     },
     addPropertyFailure: loadingFailed,
     transferPropertyStart: startLoading,
-    transferPropertySuccess(state, action) {
+    transferPropertySuccess(state) {
       state.currentProperty = null;
       state.isLoading = false;
       state.error = null;

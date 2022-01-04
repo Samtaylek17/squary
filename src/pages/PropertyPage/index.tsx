@@ -3,6 +3,7 @@ import classNames from 'classnames/bind';
 import { Modal, Form, Input, Button, Spin } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 import Header from '../../components/Header';
 import styles from './PropertyPage.module.css';
 import House1 from '../Home/img/home1.jpeg';
@@ -108,7 +109,8 @@ const PropertyPage: FC = () => {
       <section>
         <div className="container mt-5">
           <button type="button" className={styles.goback} onClick={() => navigate('/')}>
-            Back
+            <ArrowLeftOutlined className="align-middle" />
+            <span>Back</span>
           </button>
           <div className="row g-sm-5">
             <div className="col-md-6">
@@ -173,8 +175,12 @@ const PropertyPage: FC = () => {
                       />
                     </Form.Item>
                     <Form.Item>
-                      <Button className={`${cx({ submitBtn: true })}`} htmlType="submit">
-                        Add Property
+                      <Button
+                        disabled={Boolean(propertyLoading)}
+                        className={`${cx({ submitBtn: true })}`}
+                        htmlType="submit"
+                      >
+                        Update Property
                       </Button>
                     </Form.Item>
                   </Form>

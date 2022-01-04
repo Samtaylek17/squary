@@ -1,6 +1,5 @@
 import React, { FC, createContext, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import isEmpty from 'lodash/isEmpty';
 import firebase from 'firebase/compat/app';
 import { fetchUser, logout } from '../slices/authSlice';
@@ -16,7 +15,6 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 
 const AuthContextProvider: FC = (props: any): React.ReactElement<typeof AuthContext> => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const { user, isAuthenticated } = useSelector((state: RootState) => state.user);
   const [currentUser, setCurrentUser] = useState<firebase.User | null>(null);

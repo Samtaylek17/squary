@@ -1,7 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
-import { Modal, Form, Input, Button, Spin, message } from 'antd';
+import { nanoid } from 'nanoid';
+import { Modal, Form, Input, Button, Spin } from 'antd';
 import { PlusOutlined, LinkOutlined } from '@ant-design/icons';
 import classNames from 'classnames/bind';
 import { Steps } from 'intro.js-react';
@@ -21,7 +23,7 @@ const Home: FC = () => {
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [price, setPrice] = useState('');
-  const [steps, setSteps] = useState([
+  const [steps] = useState([
     {
       element: '.addProperty',
       title: 'List Property',
@@ -48,10 +50,15 @@ const Home: FC = () => {
     },
   ]);
   const [stepsEnabled, setStepsEnabled] = useState(true);
-  const [initialStep, setInitialStep] = useState(0);
+  const [initialStep] = useState(0);
+
+  // Cookies
+  const [cookies, setCookie] = useCookies(['appIntro']);
+  const appIntroCookie = `squary-${new Date(Date.now()).toString()}`;
 
   const onExit = () => {
     setStepsEnabled(false);
+    setCookie('appIntro', appIntroCookie, { path: '/' });
   };
 
   const showModal = () => {
@@ -107,13 +114,15 @@ const Home: FC = () => {
         <div className="container">
           <div className="row mt-5">
             <div className="col-md-6">
-              <Steps
-                enabled={stepsEnabled}
-                steps={steps}
-                initialStep={initialStep}
-                onExit={onExit}
-                options={{ doneLabel: 'Done' }}
-              />
+              {!cookies.appIntro && (
+                <Steps
+                  enabled={stepsEnabled}
+                  steps={steps}
+                  initialStep={initialStep}
+                  onExit={onExit}
+                  options={{ doneLabel: 'Done' }}
+                />
+              )}
               <button
                 type="button"
                 className={`${cx({ addProperty: true })} addProperty`}
@@ -170,7 +179,11 @@ const Home: FC = () => {
                       />
                     </Form.Item>
                     <Form.Item>
-                      <Button className={`${cx({ submitBtn: true })}`} htmlType="submit">
+                      <Button
+                        disabled={Boolean(propertyLoading)}
+                        className={`${cx({ submitBtn: true })}`}
+                        htmlType="submit"
+                      >
                         Add Property
                       </Button>
                     </Form.Item>

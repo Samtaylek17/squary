@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import { CookiesProvider } from 'react-cookie';
 import store, { persistor } from './app/store';
 // import AuthContextProvider from './context/AuthContext';
 import './index.css';
@@ -14,7 +15,9 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <AppRoutes />
+        <CookiesProvider>
+          <AppRoutes />
+        </CookiesProvider>
       </PersistGate>
     </Provider>
   </React.StrictMode>,

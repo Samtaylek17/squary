@@ -1,6 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import { Form, Button, Spin, Input, message } from 'antd';
 import styles from './Login.module.css';
@@ -14,7 +13,6 @@ const Login: FC = () => {
   const [password, setPassword] = useState('');
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const {
     isLoading: authLoading,
@@ -98,14 +96,15 @@ const Login: FC = () => {
                           </Form.Item>
 
                           <Form.Item>
-                            <Button className={`${cx({ submitBtn: true })}`} htmlType="submit">
+                            <Button
+                              disabled={Boolean(authLoading)}
+                              className={`${cx({ submitBtn: true })}`}
+                              htmlType="submit"
+                            >
                               Sign In
                             </Button>
                           </Form.Item>
                         </Form>
-                        <a href="/forgot-password" className="text-sm-end text-center text-green">
-                          Forgot Password?
-                        </a>
                       </div>
                     </Spin>
                     <p className="text-grey d-sm-none small">

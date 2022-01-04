@@ -18,6 +18,40 @@
   color: #ce375c;
 }
 
+.formInput {
+  height: 60px;
+  border-radius: 4px;
+  background-color: var(--light-grey);
+}
+
+input[type='password'],
+input[type='text'] {
+  background-color: var(--light-grey);
+}
+
+.submitBtn {
+  width: 100%;
+  height: 60px;
+  border-radius: 4px;
+  background-color: #ce375c;
+  border: none;
+  color: #fff;
+}
+
+.submitBtn:hover {
+  background-color: #ce375c;
+  border: none;
+  color: #fff;
+}
+
 .goback {
   margin-bottom: 20px;
+  border: none;
+  background-color: #ce375c;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }

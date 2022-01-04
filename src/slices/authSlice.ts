@@ -120,7 +120,7 @@ export const login =
         .signInWithEmailAndPassword(email as string, password as string);
       const token = await res.user?.getIdToken();
 
-      const user = checkAuth(token as string);
+      checkAuth(token as string);
 
       localStorage.setItem('token', token as string);
       dispatch(loginSuccess());
