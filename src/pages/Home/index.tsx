@@ -150,6 +150,7 @@ const Home: FC = () => {
                   >
                     <Form.Item
                       name="title"
+                      label="Title"
                       rules={[{ required: true, message: 'Title field cannot be blank' }]}
                     >
                       <Input
@@ -160,6 +161,7 @@ const Home: FC = () => {
                     </Form.Item>
                     <Form.Item
                       name="price"
+                      label="Price"
                       rules={[{ required: true, message: 'Title field cannot be blank' }]}
                     >
                       <Input
@@ -170,6 +172,7 @@ const Home: FC = () => {
                     </Form.Item>
                     <Form.Item
                       name="description"
+                      label="Description"
                       rules={[{ required: true, message: 'Title field cannot be blank' }]}
                     >
                       <Input.TextArea

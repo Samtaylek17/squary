@@ -146,6 +146,7 @@ const PropertyPage: FC = () => {
                   >
                     <Form.Item
                       name="regTitle"
+                      label="Title"
                       rules={[{ required: true, message: 'Title field cannot be blank' }]}
                     >
                       <Input
@@ -156,6 +157,7 @@ const PropertyPage: FC = () => {
                     </Form.Item>
                     <Form.Item
                       name="regPrice"
+                      label="Price"
                       rules={[{ required: true, message: 'Title field cannot be blank' }]}
                     >
                       <Input
@@ -166,6 +168,7 @@ const PropertyPage: FC = () => {
                     </Form.Item>
                     <Form.Item
                       name="regDescription"
+                      label="Description"
                       rules={[{ required: true, message: 'Title field cannot be blank' }]}
                     >
                       <Input.TextArea
@@ -188,7 +191,7 @@ const PropertyPage: FC = () => {
               </Modal>
 
               <Modal
-                title="Edit Property"
+                title="Transfer Property"
                 visible={transferModal}
                 onCancel={handleCancelModal}
                 footer={[]}
@@ -204,13 +207,14 @@ const PropertyPage: FC = () => {
                   >
                     <Form.Item
                       name="email"
+                      label="Email"
                       rules={[
                         { type: 'email', message: 'Please input a valid email!' },
                         { required: true, message: 'Please input your email!' },
                       ]}
                     >
                       <Input
-                        placeholder="Email"
+                        placeholder="Enter recipient email"
                         type="email"
                         className={`${cx({ formInput: true })}`}
                         onChange={(e) => setRecipientEmail(e.target.value)}
