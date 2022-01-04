@@ -2,6 +2,8 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+View Deployed version here [https://squaryspace.herokuapp.com](https://squaryspace.herokuapp.com)
+
 ## Frontend Available Scripts
 
 In the project directory, you can run:
