@@ -5,6 +5,15 @@ const { db } = require('./utils/admin');
 
 const app = express();
 const cors = require('cors')({ origin: true });
+const corsOption = {
+  origin: '*',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.options('*', corsOption);
 
 // eslint-disable-next-line max-len
 exports.addUIDfromSignUp = functions.auth.user().onCreate(async ({ email, uid }) => {

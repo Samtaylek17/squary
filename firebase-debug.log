@@ -1,0 +1,14 @@
+[debug] [2022-01-05T13:38:55.764Z] ----------------------------------------------------------------------
+[debug] [2022-01-05T13:38:55.767Z] Command:       /Users/samtaylek/.nvm/versions/node/v16.6.0/bin/node /Users/samtaylek/.nvm/versions/node/v16.6.0/bin/firebase deploy
+[debug] [2022-01-05T13:38:55.767Z] CLI Version:   10.0.1
+[debug] [2022-01-05T13:38:55.767Z] Platform:      darwin
+[debug] [2022-01-05T13:38:55.768Z] Node Version:  v16.6.0
+[debug] [2022-01-05T13:38:55.776Z] Time:          Wed Jan 05 2022 14:38:55 GMT+0100 (West Africa Standard Time)
+[debug] [2022-01-05T13:38:55.776Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-01-05T13:38:55.863Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-01-05T13:38:55.863Z] > authorizing via signed-in user (ogunsusitemitayo99@gmail.com)
+[debug] [2022-01-05T13:38:55.863Z] [iam] checking project preferental-9d6e6 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2022-01-05T13:38:55.866Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2022-01-05T13:38:55.866Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
