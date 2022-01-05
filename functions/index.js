@@ -16,8 +16,6 @@ exports.addUIDfromSignUp = functions.auth.user().onCreate(async ({ email, uid })
   }
 });
 
-app.use(cors);
-
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
@@ -36,6 +34,8 @@ const {
   getOneProperty,
 } = require('./apis/property');
 
+app.use(cors);
+
 // Users
 app.post('/login', loginUser);
 // app.post('/logout', logout);
@@ -44,8 +44,8 @@ app.get('/user', auth, getUserInfo);
 // Properties
 app.post('/properties', auth, listProperty);
 app.get('/properties', auth, getMyProperties);
-app.put('/properties/:propertyId', auth, editProperty);
+app.post('/properties/:propertyId', auth, editProperty);
 app.get('/properties/:propertyId', auth, getOneProperty);
-app.put('/properties/transfer/:propertyId', auth, transferProperty);
+app.post('/properties/transfer/:propertyId', auth, transferProperty);
 
 exports.api = functions.https.onRequest(app);

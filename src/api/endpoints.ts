@@ -32,7 +32,7 @@ export async function getMyProperties() {
 
 export async function transferProperty(propertyId: string, recipientEmail: string) {
   const url = `${process.env.REACT_APP_PROPERTY_API_URL}/properties/transfer/${propertyId}`;
-  return api.put(url, { recipientEmail });
+  return api.post(url, { recipientEmail });
 }
 
 export async function getOneProperty(propertyId: string) {
@@ -42,5 +42,5 @@ export async function getOneProperty(propertyId: string) {
 
 export async function updateProperty(propertyId: string, updatedProperty: Partial<NewProperty>) {
   const url = `${process.env.REACT_APP_PROPERTY_API_URL}/properties/${propertyId}`;
-  return api.put(url, updatedProperty);
+  return api.post(url, updatedProperty);
 }
