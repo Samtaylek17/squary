@@ -8,6 +8,30 @@ const cors = require('cors')({ origin: true });
 
 const { validateLoginData, validateSignUpData } = require('../utils/validators');
 
+exports.register = (request, response) => {
+  cors(request, response, () => {
+    const newUser = {
+      firstname: request.body.firstname,
+      lastname: request.body.lastname,
+      email: request.body.email,
+      // password: request.body.password,
+      createdAt: new Date().toISOString(),
+      userId: request.body.userId,
+    };
+
+    console.log(newUser);
+
+    db.doc(`/users/${newUser.email}`)
+      .set(newUser, { merge: true })
+      .then(() => {
+        return response.status(201).json({ email: 'created' });
+      })
+      .catch((err) => {
+        return response.status(500).json({ general: 'Something went wrong, please try again' });
+      });
+  });
+};
+
 exports.loginUser = (request, response) => {
   cors(request, response, () => {
     const user = {

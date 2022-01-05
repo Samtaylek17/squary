@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import checkAuth from '../helpers/checkAuth';
-import firebase from '../firebase/base';
-// import { loginUser, getUser } from '../api/endpoints';
+import app from '../firebase/base';
+import { signupUser } from '../api/endpoints';
 
 interface AuthInitialState {
   isAuthenticated: boolean;
@@ -87,19 +87,31 @@ export const signup =
   async (dispatch: (arg: IAction) => void) => {
     dispatch(loginStart());
     try {
-      const res = await firebase.auth().createUserWithEmailAndPassword(email, password);
+      const res = await app.auth().createUserWithEmailAndPassword(email, password);
       if (res.user) {
-        const userData = {
+        const token = await res.user.getIdToken();
+        await localStorage.setItem('token', token);
+
+        await signupUser({
           firstname,
           lastname,
           email,
-          id: res.user.uid,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        };
-        await firebase.firestore().collection('/users').doc(res.user.uid).set(userData);
-        await res.user.updateProfile({ displayName: `${firstname} ${lastname}` });
+          password,
+          userId: res.user.uid,
+        });
+        // const userData = {
+        //   firstname,
+        //   lastname,
+        //   email,
+        //   id: res.user.uid,
+        //   createdAt: app.firestore.FieldValue.serverTimestamp(),
+        // };
+        // console.log(res.user);
+        // await app.firestore().collection('/users').doc(res.user.uid).set(userData);
+        // await res.user.updateProfile({ displayName: `${firstname} ${lastname}` });
         dispatch(signupSuccess());
-        navigate.to('/');
+        console.log('navigating away');
+        navigate('/');
       }
     } catch (err: any) {
       let message = {};
@@ -115,9 +127,7 @@ export const login =
   async (dispatch: (arg: IAction) => void) => {
     dispatch(loginStart());
     try {
-      const res = await firebase
-        .auth()
-        .signInWithEmailAndPassword(email as string, password as string);
+      const res = await app.auth().signInWithEmailAndPassword(email as string, password as string);
       const token = await res.user?.getIdToken();
 
       checkAuth(token as string);
@@ -143,7 +153,7 @@ export const logout = () => async (dispatch: (arg: IAction) => void) => {
 export const fetchUser = () => async (dispatch: (arg: IAction) => void) => {
   dispatch(loginStart());
   try {
-    const user = firebase.auth().currentUser?.providerData[0];
+    const user = app.auth().currentUser?.providerData[0];
     dispatch(getUserSuccess(user));
   } catch (err: any) {
     dispatch(loginFailure(err.toString()));

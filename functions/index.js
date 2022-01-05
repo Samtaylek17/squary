@@ -19,14 +19,20 @@ app.options('*', cors({ origin: true }));
 // app.options('*', cors(corsOption));
 
 // eslint-disable-next-line max-len
-exports.addUIDfromSignUp = functions.auth.user().onCreate(async ({ email, uid }) => {
-  try {
-    // eslint-disable-next-line max-len
-    return db.collection('users').doc(email).set({ email, userId: uid }, { merge: true });
-  } catch (error) {
-    console.log('failed to add uid from new user', error);
-  }
-});
+exports.addUIDfromSignUp = functions.auth
+  .user()
+  .onCreate(async ({ firstname, lastname, email, uid }) => {
+    try {
+      console.log(firstname, lastname, email);
+      // eslint-disable-next-line max-len
+      return db
+        .collection('users')
+        .doc(email)
+        .set({ firstname, lastname, email, userId: uid }, { merge: true });
+    } catch (error) {
+      console.log('failed to add uid from new user', error);
+    }
+  });
 
 exports.deleteUserByEmail = functions.https.onRequest(async (request, response) => {
   const userEmail = request.body.userEmail;
@@ -62,7 +68,7 @@ exports.deleteUserByEmail = functions.https.onRequest(async (request, response) 
 //   response.send("Hello from Firebase!");
 // });
 
-const { loginUser } = require('./apis/users');
+const { loginUser, register } = require('./apis/users');
 
 const {
   listProperty,
@@ -74,6 +80,7 @@ const {
 
 // Users
 app.post('/login', loginUser);
+app.post('/signup', register);
 // app.post('/logout', logout);
 app.get('/user', auth, getUserInfo);
 

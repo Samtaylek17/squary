@@ -7,6 +7,23 @@ export async function loginUser({ email, password }: { email: string; password: 
   return api.post(url, { email, password });
 }
 
+export async function signupUser({
+  firstname,
+  lastname,
+  email,
+  password,
+  userId,
+}: {
+  firstname: string;
+  lastname: string;
+  email: string;
+  password: string;
+  userId: string;
+}) {
+  const url = `${process.env.REACT_APP_PROPERTY_API_URL}/signup`;
+  return api.post(url, { firstname, lastname, email, password, userId });
+}
+
 export async function getUser() {
   const url = `${process.env.REACT_APP_PROPERTY_API_URL}/user`;
   return api.get(url);
