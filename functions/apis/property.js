@@ -1,4 +1,6 @@
 const { db } = require('../utils/admin');
+// const firebase = require('firebase/compat/app');
+
 const cors = require('cors')({ origin: true });
 
 exports.listProperty = (request, response) => {
@@ -65,15 +67,16 @@ exports.transferProperty = async (request, response) => {
     document.get().then((doc) => {
       if (doc.exists && doc.data().owner === request.user.email) {
         db.collection('users')
-          .where('email', '==', request.body.recipientEmail)
+          .doc(request.body.recipientEmail)
           .get()
-          .then((querySnapshot) => {
-            if (querySnapshot) {
-              console.log(querySnapshot.docs[0].data());
+          .then((data) => {
+            if (data.data().email === request.body.recipientEmail) {
+              // request.user.email = data.docs[0].data().email;
+              console.log(data.data());
               document
                 .update({
-                  owner: request.body.recipientEmail,
-                  userId: querySnapshot.docs[0].data().id,
+                  owner: doc.data().email,
+                  userId: data.data().userId,
                   updatedAt: new Date().toISOString(),
                 })
                 .then(() => {
@@ -85,6 +88,9 @@ exports.transferProperty = async (request, response) => {
                     error: err.code,
                   });
                 });
+              // request.user.roles = data.docs[0].data().roles;
+            } else {
+              return response.status(404).json({ message: 'User not found' });
             }
           });
       } else {
