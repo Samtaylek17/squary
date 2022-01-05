@@ -4,16 +4,16 @@ const { auth, getUserInfo } = require('./utils/auth');
 const { db } = require('./utils/admin');
 
 const app = express();
-const cors = require('cors')({ origin: true });
-const corsOption = {
-  origin: '*',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  preflightContinue: false,
-  optionsSuccessStatus: 204,
-  allowedHeaders: ['Content-Type', 'Authorization'],
-};
+const cors = require('cors');
+// const corsOption = {
+//   origin: '*',
+//   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+//   preflightContinue: false,
+//   optionsSuccessStatus: 204,
+//   allowedHeaders: ['Content-Type', 'Authorization'],
+// };
 
-app.options('*', corsOption);
+// app.options('*', cors(corsOption));
 
 // eslint-disable-next-line max-len
 exports.addUIDfromSignUp = functions.auth.user().onCreate(async ({ email, uid }) => {
@@ -43,7 +43,8 @@ const {
   getOneProperty,
 } = require('./apis/property');
 
-app.use(cors);
+app.use(cors({ origin: true }));
+app.options('*', cors({ origin: true }));
 
 // Users
 app.post('/login', loginUser);
