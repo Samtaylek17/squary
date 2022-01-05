@@ -70,12 +70,13 @@ exports.transferProperty = async (request, response) => {
           .doc(request.body.recipientEmail)
           .get()
           .then((data) => {
+            console.log(data.data());
+            console.log(doc.data().owner);
             if (data.data().email === request.body.recipientEmail) {
               // request.user.email = data.docs[0].data().email;
-              console.log(data.data());
               document
                 .update({
-                  owner: doc.data().email,
+                  owner: request.body.recipientEmail,
                   userId: data.data().userId,
                   updatedAt: new Date().toISOString(),
                 })

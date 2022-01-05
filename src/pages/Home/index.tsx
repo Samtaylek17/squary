@@ -162,10 +162,24 @@ const Home: FC = () => {
                     <Form.Item
                       name="price"
                       label="Price"
-                      rules={[{ required: true, message: 'Title field cannot be blank' }]}
+                      rules={[
+                        { required: true, message: 'Price field cannot be blank' },
+                        ({ getFieldValue }) => ({
+                          validator(rule, value) {
+                            if (
+                              value.match(/^[0-9\b]+$/) ||
+                              getFieldValue('price').match(/^[0-9\b]+$/)
+                            ) {
+                              return Promise.resolve();
+                            }
+                            return Promise.reject(new Error('Price must contain digits only'));
+                          },
+                        }),
+                      ]}
                     >
                       <Input
                         placeholder="Price"
+                        prefix="$"
                         className={`${cx({ formInput: true })}`}
                         onChange={(e) => setPrice(e.target.value)}
                       />
@@ -173,9 +187,10 @@ const Home: FC = () => {
                     <Form.Item
                       name="description"
                       label="Description"
-                      rules={[{ required: true, message: 'Title field cannot be blank' }]}
+                      rules={[{ required: true, message: 'Description field cannot be blank' }]}
                     >
                       <Input.TextArea
+                        minLength={5}
                         placeholder="Description"
                         className={`${cx({ formInput: true })}`}
                         onChange={(e) => setDescription(e.target.value)}

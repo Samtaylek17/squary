@@ -1,7 +1,7 @@
 const functions = require('firebase-functions');
 const express = require('express');
 const { auth, getUserInfo } = require('./utils/auth');
-const { db } = require('./utils/admin');
+const { db, admin } = require('./utils/admin');
 
 const app = express();
 const cors = require('cors');
@@ -26,6 +26,32 @@ exports.addUIDfromSignUp = functions.auth.user().onCreate(async ({ email, uid })
   } catch (error) {
     console.log('failed to add uid from new user', error);
   }
+});
+
+exports.deleteUserByEmail = functions.https.onRequest(async (request, response) => {
+  const userEmail = request.body.userEmail;
+
+  await admin
+    .auth()
+    .getUserByEmail(userEmail)
+    .then((userRecord) => {
+      const uid = userRecord.uid;
+      admin
+        .auth()
+        .deleteUser(uid)
+        .then(() => {
+          console.log('Successfully deleted user');
+          response.status(500).send('Deleted User');
+        })
+        .catch((error) => {
+          console.log('Error deleting user', error);
+          response.status(500).send('Failed to delete user. User may not exist');
+        });
+    })
+    .catch((error) => {
+      console.log('Error fetching user data', error);
+      response.status(500).send('failed');
+    });
 });
 
 // // Create and Deploy Your First Cloud Functions
