@@ -5,6 +5,9 @@ const { db } = require('./utils/admin');
 
 const app = express();
 const cors = require('cors');
+
+app.use(cors({ origin: true }));
+app.options('*', cors({ origin: true }));
 // const corsOption = {
 //   origin: '*',
 //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -42,9 +45,6 @@ const {
   getMyProperties,
   getOneProperty,
 } = require('./apis/property');
-
-app.use(cors({ origin: true }));
-app.options('*', cors({ origin: true }));
 
 // Users
 app.post('/login', loginUser);
